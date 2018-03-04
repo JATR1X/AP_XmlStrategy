@@ -6,8 +6,8 @@
 
 namespace AP_XmlStrategy\Mvc\Service;
 
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Interop\Container\ContainerInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 use AP_XmlStrategy\View\Strategy\XmlStrategy;
 
 /**
@@ -23,14 +23,16 @@ class ViewXmlStrategyFactory implements FactoryInterface
      * Retrieves the ViewXmlRenderer service from the service locator, and
      * injects it into the constructor for the xml strategy.
      *
-     * @param  ServiceLocatorInterface $serviceLocator
+     * @param  ContainerInterface $container
+     * @param  string $name
+     * @param  null|array $options
      * @return XmlStrategy
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function __invoke(ContainerInterface $container, $name, array $options = null)
     {
-        $renderer = $serviceLocator->get('ViewXmlRenderer');
+        $renderer = $container->get('ViewXmlRenderer');
         $strategy = new XmlStrategy($renderer);
-
+        
         return $strategy;
     }
 }

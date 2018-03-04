@@ -6,11 +6,8 @@
 
 namespace AP_XmlStrategy\Mvc\Service;
 
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\View\Resolver\AggregateResolver;
-use Zend\View\Resolver\TemplatePathStack;
-use Zend\View\Resolver\TemplateMapResolver;
+use Interop\Container\ContainerInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 use AP_XmlStrategy\View\Renderer\XmlRenderer;
 
 /**
@@ -23,19 +20,20 @@ class ViewXmlRendererFactory implements FactoryInterface
     /**
      * Create and return the feed view renderer
      *
-     * @param  ServiceLocatorInterface $serviceLocator
+     * @param  ContainerInterface $container
+     * @param  string $name
+     * @param  null|array $options
      * @return XmlRenderer
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function __invoke(ContainerInterface $container, $name, array $options = null)
     {
         $renderer = new XmlRenderer();
 
-        $renderer->setResolver($serviceLocator->get('ViewXmlResolver'));
+        $renderer->setResolver($container->get('ViewXmlResolver'));
 
         // TODO: has a likely hood of 99% to cause a bug
-        //$renderer->setHelperPluginManager(clone $serviceLocator->get('ViewHelperManager'));
+        //$renderer->setHelperPluginManager(clone $container->get('ViewHelperManager'));
 
         return $renderer;
     }
 }
-

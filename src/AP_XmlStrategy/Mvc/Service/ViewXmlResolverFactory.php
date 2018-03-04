@@ -6,9 +6,9 @@
 
 namespace AP_XmlStrategy\Mvc\Service;
 
+use Interop\Container\ContainerInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 use Zend\View\Resolver\AggregateResolver;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * @category   Zend
@@ -23,14 +23,16 @@ class ViewXmlResolverFactory implements FactoryInterface
      * Creates a Zend\View\Resolver\AggregateResolver and attaches the template
      * map resolver and path stack resolver
      *
-     * @param  ServiceLocatorInterface $serviceLocator
+     * @param  ContainerInterface $container
+     * @param  string $name
+     * @param  null|array $options
      * @return AggregateResolver
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $resolver = new AggregateResolver();
-        $resolver->attach($serviceLocator->get('ViewXmlTemplateMapResolver'));
-        $resolver->attach($serviceLocator->get('ViewXmlTemplatePathStack'));
+        $resolver->attach($container->get('ViewXmlTemplateMapResolver'));
+        $resolver->attach($container->get('ViewXmlTemplatePathStack'));
 
         return $resolver;
     }
